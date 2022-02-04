@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <title>MAUSAM</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>What is WEATHER like Today? <i class="fas fa-sun"></i></h1>
+    </nav>
+
+    <div class="city">
+        <form action="", method="POST", class="box">
+            <input class="data" type="text", name="city", placeholder="Enter the name of the city" align="middle">
+            <button class="btn"><i class="fas fa-search"></i></button>
+        </form>
+        <br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% set message_class = "success" %}
+                {% if category == "error" %}
+                    {% set message_class = "error" %}
+                {% endif %}
+                <div class="flash">
+                    <div class= {{message_class}}>
+                        <p id="hideaway">{{ message }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif%}
+        {% endwith %}
+        <br>
+    </div>
+    <hr>
+    
+    {% for weather in weather_data %}
+        <div class="wether-info">
+            <div class="heading-city flex2">
+                <h1 id={{weather.city}} , class="heading flex2">{{ weather.city }}</h1>
+                <a href="{{ url_for( 'delete', name=(weather.city) )}}">
+                    <button><i class="fas fa-trash flex2"></i></button>
+                </a>
+                <br>
+            </div>
+
+            <div class="info">
+                <p class="c">Current Weather</p>
+                <div class="format flex1">
+                    <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png">
+                    <h1>{{ weather.temperature }}°F</h1>
+                    <h2>feels like {{  weather.feels }}°F</h2>
+                </div>
+                <h2 class="j">{{ weather.description }}</h2>
+            </div>
+           
+            <div class="info">
+                <div class="format1">
+                    <h2 class="l">Min-temp</h2>
+                    <h1 class="r">{{ weather.min_temperature }}</h1>
+                    <h2 class="l">Max-temp</h2>
+                    <h1 class="r">{{ weather.max_temperature }}</h1>
+                    <h2 class="l">Humidity</h2>
+                    <h1 class="r"> {{ weather.humidity }}</h1>
+                    <h2 class="l">Visibility</h2>
+                    <h1 class="r">{{ weather.visibility }}</h1>
+                    <h2 class="l">Wind-Speed</h2>
+                    <h1 class="r">{{ weather.wind }}</h1>
+                </div>
+            </div>
+            <hr>
+        </div>
+    {% endfor %}
+
+</body>
+</html>
